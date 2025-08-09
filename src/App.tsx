@@ -5,8 +5,6 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <PomodoroPro />
-      <div className="text-emerald-600 font-bold">Tailwind OK?</div>
-
     </div>
     
   );

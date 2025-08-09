@@ -8,7 +8,6 @@ import './tw-check.css';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
-    <div className="text-emerald-600 font-bold">Tailwind OK?</div>
 
   </StrictMode>,
 )
