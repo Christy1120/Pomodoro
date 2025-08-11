@@ -185,6 +185,7 @@ export default function PomodoroPro() {
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
             FocusFlow Pomodoro
           </h1>
+          
           <div className="flex items-center gap-3">
             <ModeBadge isWork={isWork} />
             <button
