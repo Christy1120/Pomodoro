@@ -1,5 +1,4 @@
 // src/features/pomodoro/components/TomatoStats.tsx
-import React from "react";
 
 type Props = {
   today: number;

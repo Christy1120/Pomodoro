@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function SpeechBubble({ text }:{ text:string }) {
   return (
     <div className="absolute right-6 top-6 max-w-xs">

@@ -1,4 +1,3 @@
-import React from "react";
 
 export default function IconButton({ title, onClick, icon: Icon }:{ title:string; onClick:()=>void; icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; }) {
   return (

@@ -1,4 +1,3 @@
-import React from "react";
 import PomodoroPro from "./features/pomodoro/PomodoroPro";
 
 export default function App() {

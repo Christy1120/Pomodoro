@@ -1,5 +1,4 @@
 // components/TimerDisplay.tsx
-import React from "react";
 
 export default function TimerDisplay({
   mm, ss, progress, isWork,

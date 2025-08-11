@@ -1,5 +1,5 @@
 // src/features/pomodoro/components/YouTubePlaylist.tsx
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import  { useEffect, useMemo, useRef, useState } from "react";
 import YouTube from "react-youtube";
 import { extractVideoId } from "../utils/youtube";
 

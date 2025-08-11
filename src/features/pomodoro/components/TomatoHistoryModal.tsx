@@ -1,5 +1,5 @@
 // src/features/pomodoro/components/TomatoHistoryModal.tsx
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ResponsiveContainer,
   AreaChart, Area,

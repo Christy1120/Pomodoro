@@ -1,5 +1,5 @@
 // src/features/pomodoro/components/TodoList.tsx
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useTodos } from "../hooks/useTodos";
 import type { Filter } from "../hooks/useTodos";
 
@@ -19,13 +19,14 @@ export default function TodoList() {
     setText("");
   };
 
-  const onEditStart = (id: string, current: string) => {
+  const onEditStart = (id: string, _current: string) => {
     setEditingId(id);
     setTimeout(() => {
       editInputRef.current?.focus();
       editInputRef.current?.select();
     }, 0);
   };
+  
 
   const onEditCommit = (id: string, v: string) => {
     update(id, v);

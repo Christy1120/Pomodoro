@@ -1,5 +1,5 @@
 // src/features/pomodoro/components/NavRail.tsx
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 
 export type SectionId = "timer" | "todo" | "music";

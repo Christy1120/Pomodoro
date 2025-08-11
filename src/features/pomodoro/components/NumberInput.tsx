@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function NumberInput({ label, value, min, max, onChange, disabled }:{ label:string; value:number; min:number; max:number; onChange:(v:number)=>void; disabled:boolean; }) {
   const dec = () => onChange(Math.max(min, value - 1));
   const inc = () => onChange(Math.min(max, value + 1));

@@ -1,5 +1,4 @@
 // src/features/pomodoro/components/SoundSettings.tsx
-import React from "react";
 import type { SoundKind } from "../hooks/useSoundSettings";
 import type { SoundSource } from "../hooks/useSoundSettings";
 

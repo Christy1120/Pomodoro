@@ -1,5 +1,5 @@
 // src/features/pomodoro/PomodoroPro.tsx
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import  { useEffect, useMemo, useRef, useState } from "react";
 import { usePomodoro } from "./hooks/usePomodoro";
 import { BEEP_DATA_URL, primeAudio, playSound } from "./utils/audio";
 

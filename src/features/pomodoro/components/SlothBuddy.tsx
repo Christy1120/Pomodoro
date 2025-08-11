@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import HeartBurst from "./HeartBurst";
 import { PET_POP_URL, STRETCH_SWISH_URL } from "../utils/sfx";
