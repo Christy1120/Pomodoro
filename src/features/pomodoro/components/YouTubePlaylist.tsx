@@ -5,31 +5,87 @@ import { extractVideoId } from "../utils/youtube";
 
 type Item = { id: string; title?: string };
 
+type Props = {
+  /** 預設影片 ID（或連結），只有在 localStorage 為空時才套用 */
+  initialIds?: string[];
+};
+
 const LS_KEY = "pomodoro_sloth_yt_playlist";
 
-export default function YouTubePlaylist() {
+export default function YouTubePlaylist({ initialIds = [] }: Props) {
   const [input, setInput] = useState("");
   const [items, setItems] = useState<Item[]>([]);
   const [idx, setIdx] = useState(0);
   const [open, setOpen] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const playerRef = useRef<any>(null);
+  const initedRef = useRef(false);
 
   // ------------------ 載入 / 儲存 ------------------
   useEffect(() => {
+    if (initedRef.current) return;
+    initedRef.current = true;
+
     const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return;
-    try {
-      const parsed = JSON.parse(raw) as Item[];
-      if (Array.isArray(parsed)) setItems(parsed);
-    } catch {}
-  }, []);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw) as Item[];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setItems(parsed);
+          return;
+        }
+      } catch {}
+    }
+
+    // localStorage 為空：使用預設
+    if (initialIds.length > 0) {
+      const uniq: string[] = [];
+      initialIds.forEach((x) => {
+        const id = extractVideoId(x);
+        if (id && !uniq.includes(id)) uniq.push(id);
+      });
+      if (uniq.length > 0) {
+        setItems(uniq.map((id) => ({ id })));
+        setIdx(0);
+      }
+    }
+  }, [initialIds]);
 
   useEffect(() => {
     localStorage.setItem(LS_KEY, JSON.stringify(items));
   }, [items]);
 
   const currentId = items[idx]?.id ?? "";
+
+  // ------------------ 取標題（無金鑰，用 oEmbed） ------------------
+  async function fetchTitle(id: string, signal?: AbortSignal): Promise<string | null> {
+    try {
+      const url = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`;
+      const res = await fetch(url, { signal });
+      if (!res.ok) return null;
+      const data = await res.json();
+      return typeof data?.title === "string" ? data.title : null;
+    } catch {
+      return null;
+    }
+  }
+
+  // 對缺標題的項目補上 title（逐一補，避免狂刷）
+  useEffect(() => {
+    const abort = new AbortController();
+    (async () => {
+      const need = items.filter((x) => !x.title).slice(0, 5);
+      for (const it of need) {
+        const title = await fetchTitle(it.id, abort.signal);
+        if (title) {
+          setItems((prev) =>
+            prev.map((p) => (p.id === it.id ? { ...p, title } : p))
+          );
+        }
+      }
+    })();
+    return () => abort.abort();
+  }, [items]);
 
   // ------------------ 操作 ------------------
   const add = () => {
@@ -43,7 +99,7 @@ export default function YouTubePlaylist() {
       setErrorMsg("此影片已在清單中。");
       return;
     }
-    setItems((prev) => [...prev, { id }]);
+    setItems((prev) => [...prev, { id }]); // 標題會在上方 effect 自動補齊
     setInput("");
     if (items.length === 0) setIdx(0);
   };
@@ -137,7 +193,7 @@ export default function YouTubePlaylist() {
 
       {open && (
         <>
-          {/* 滿卡片寬度 + 固定 16:9，高度隨寬度自動縮放 */}
+          {/* Player */}
           <div className="mt-2">
             <div className="relative w-full aspect-[16/9] overflow-hidden rounded-xl shadow-sm bg-black">
               {currentId ? (
@@ -159,7 +215,7 @@ export default function YouTubePlaylist() {
                   onReady={(e) => {
                     playerRef.current = e.target;
                     try {
-                      e.target.mute(); // 避免首次被阻擋
+                      e.target.mute();
                     } catch {}
                   }}
                   onError={(e: any) => {
@@ -181,31 +237,34 @@ export default function YouTubePlaylist() {
             </div>
           </div>
 
-          {/* 簡單的清單列 */}
+          {/* 清單：顯示標題（沒有就顯示順序號） */}
           {items.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-3">
-              {items.map((it, i) => (
-                <div
-                  key={it.id}
-                  className={`flex items-center gap-2 rounded-full px-3 py-1 text-sm border
-                    ${i === idx ? "bg-rose-50 border-rose-200 text-rose-700" : "bg-white border-slate-200"}`}
-                >
-                  <button
-                    onClick={() => setIdx(i)}
-                    className="font-mono hover:underline"
-                    title="播放這首"
+              {items.map((it, i) => {
+                const label = it.title ? it.title : `第 ${i + 1} 首`;
+                return (
+                  <div
+                    key={it.id}
+                    className={`flex items-center gap-2 rounded-full px-3 py-1 text-sm border
+                      ${i === idx ? "bg-rose-50 border-rose-200 text-rose-700" : "bg-white border-slate-200"}`}
+                    title={it.title ? `${it.title}（${it.id}）` : it.id}
                   >
-                    {it.id}
-                  </button>
-                  <button
-                    onClick={() => remove(it.id)}
-                    className="text-slate-400 hover:text-rose-600"
-                    title="移除"
-                  >
-                    刪除
-                  </button>
-                </div>
-              ))}
+                    <button
+                      onClick={() => setIdx(i)}
+                      className="hover:underline"
+                    >
+                      {label}
+                    </button>
+                    <button
+                      onClick={() => remove(it.id)}
+                      className="text-slate-400 hover:text-rose-600"
+                      title="移除"
+                    >
+                      刪除
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           )}
         </>

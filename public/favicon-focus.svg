@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- 背景徽章：專注（暖色番茄紅） -->
+  <circle cx="16" cy="16" r="16" fill="#ff6b6b"/>
+  <!-- 樹懶頭部 -->
+  <circle cx="16" cy="16" r="12" fill="#b69175"/>
+  <!-- 耳朵 -->
+  <circle cx="8" cy="11" r="2.6" fill="#9b7a61"/>
+  <circle cx="24" cy="11" r="2.6" fill="#9b7a61"/>
+  <!-- 臉部淺色區 -->
+  <ellipse cx="16" cy="19" rx="8.6" ry="5.2" fill="#e6d5c2"/>
+  <!-- 眼睛（專注：睜眼） -->
+  <circle cx="12.2" cy="17.2" r="1.6" fill="#2f2926"/>
+  <circle cx="19.8" cy="17.2" r="1.6" fill="#2f2926"/>
+  <!-- 鼻子 + 嘴巴（微笑） -->
+  <ellipse cx="16" cy="19.9" rx="2.6" ry="1.8" fill="#e9dac9"/>
+  <circle cx="16" cy="19.2" r="0.8" fill="#2f2926"/>
+  <path d="M14.9 21.2c0 .8 .6 1.2 1.1 1.2s1.1-.4 1.1-1.2" stroke="#2f2926" stroke-width=".7" fill="none" stroke-linecap="round"/>
+</svg>
